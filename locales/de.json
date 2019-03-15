@@ -15,5 +15,11 @@
 	"Mine": "Mine",
 	"Peer": "Peer",
 	"Tx": "Tx",
-	"$": "$"
+	"$": "$",
+	"Demo": "Demo",
+	"Vector Blockchain Demo": "Vector Blockchain Demo",
+	"Transaction Demo": "Transaction Demo",
+	"Vector Blockchain": "Vector Blockchain",
+	"id": "id",
+	"Signature": "Signature"
 }

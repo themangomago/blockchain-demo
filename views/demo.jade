@@ -1,0 +1,55 @@
+extends layout
+
+block content
+  .container-fluid
+    h1 #{__('Vector Blockchain')}
+    p text ole <br> test
+    - var peers = {1: 'A'}
+    - each peer, chain in peers
+     
+      .row.row-horizon
+        - var blocks = []
+        - blocks.push({block: 1, chain: chain, nonce: 16651, coinbasevalue: '100.00', coinbaseto: 'Anders', txs: [], previous: '0000000000000000000000000000000000000000000000000000000000000000'})
+        - blocks.push({block: 2, chain: chain, nonce: 215458, coinbasevalue: '100.00', coinbaseto: 'Lucas', txs: [{value: '10.00', from: 'Anders', to: 'Sophia'},{value: '20.00', from: 'Anders', to: 'Lucas'},{value: '15.00', from: 'Anders', to: 'Emily'},{value: '15.00', from: 'Anders', to: 'Madison'}], previous: '1000438d7625b86a6f366545b1929975a0d3ff1f8847e56cc587cadddb0ab781'})
+        - blocks.push({block: 3, chain: chain, nonce: 146, coinbasevalue: '100.00', coinbaseto: 'Anders', txs: [{value: '10.00', from: 'Emily', to: 'Jackson'},{value: '5.00', from: 'Madison', to: 'Jackson'},{value: '20.00', from: 'Lucas', to: 'Grace'}], previous: '0003fb6ec96ff4dc315e9c813742fb433'})
+        each block in blocks
+          .col-xs-7
+            include includes/demoblock.jade
+
+
+  script.
+    $(function() {
+      setup(1, 1);
+      setup(2, 1);
+      setup(3, 1);
+    });
+
+    function getText(block, chain) {
+      console.log("req: "+block + " on chain:" +chain);
+      var s = $('#block'+block+'chain'+chain+'number').val() +
+              $('#block'+block+'chain'+chain+'nonce').val() +
+              $('#block'+block+'chain'+chain+'coinbasevalue').val() +
+              $('#block'+block+'chain'+chain+'coinbaseto').val();
+
+      for (var x=0; $('#block'+block+'chain'+chain+'tx'+x+'value').length > 0; x++) {
+        s = s + $('#block'+block+'chain'+chain+'tx'+x+'value').val() +
+                $('#block'+block+'chain'+chain+'tx'+x+'from').val() +
+                $('#block'+block+'chain'+chain+'tx'+x+'to').val();
+      }
+      s = s + $('#block'+block+'chain'+chain+'previous').val();
+      return s;
+    }
+
+    function setup(block, chain) {
+      setBlocks(3);
+      updateHash(block, chain);
+      $('#block'+block+'chain'+chain+'mineButton').click(function(e) {
+          e.preventDefault();
+          var l = Ladda.create(this);
+          l.start();
+          setTimeout(function() {
+              mine(block, chain, true);
+              l.stop();
+            }, 250); // give UI time to update
+        });
+    }

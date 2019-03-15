@@ -27,27 +27,28 @@ html
 
   body
     nav.navbar.navbar-inverse.navbar-fixed-top
-      .container
+      .container-fluid
         .navbar-header
           button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#navbar', aria-expanded='false', aria-controls='navbar')
             span.sr-only Toggle navigation
             span.icon-bar
             span.icon-bar
             span.icon-bar
-          a.navbar-brand(href='/') #{__('Blockchain Demo')}
+          a.navbar-brand(href='/') #{__('Vector Blockchain Demo')}
         #navbar.collapse.navbar-collapse
-          ul.nav.navbar-nav.navbar-right
+          ul.nav.navbar-nav.navbar-left
             li(class={active: page === 'hash'})
               a(href='/hash') #{__('Hash')}
+            li(class={active: page === 'signature'})
+              a(href='/hash') #{__('Signature')}
             li(class={active: page === 'block'})
               a(href='/block') #{__('Block')}
             li(class={active: page === 'blockchain'})
               a(href='/blockchain') #{__('Blockchain')}
-            li(class={active: page === 'distributed'})
-              a(href='/distributed') #{__('Distributed')}
-            li(class={active: page === 'tokens'})
-              a(href='/tokens') #{__('Tokens')}
-            li(class={active: page === 'coinbase'})
-              a(href='/coinbase') #{__('Coinbase')}
+            li(class={active: page === 'demo'})
+              a(href='/demo') #{__('Demo')}
 
+          ul.nav.navbar-nav.navbar-right
+            li()
+             img(src="/images/Vector_Logo_black_red_RGB.png", style="height: 40px; margin: 16px;")
     block content

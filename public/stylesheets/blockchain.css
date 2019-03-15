@@ -44,3 +44,14 @@ input {
   border: 0;
   z-index: 20000;
 }
+
+.navbar-inverse {
+  background-image: none;
+  background-color: #ffffff;
+  color: #000000;
+  border: 0px;
+}
+
+.nav > li.active {
+  height: 72px;
+}
