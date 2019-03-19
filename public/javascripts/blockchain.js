@@ -36,6 +36,31 @@ function setBlocks(count) {
   blocks = count;
 }
 
+
+function calcBobCredentials() {
+  console.log("calcBobCredentials");
+  let temp = "";
+  temp = CryptoJS.SHA256(getBobSeed());
+  $('#bobPrivKey').val(temp);
+  temp = CryptoJS.SHA256(temp);
+  $('#bobPubKey').val(temp);
+  temp = CryptoJS.SHA256(temp).toString().substr(0,32);
+  $('#bobPKH').val(temp);
+}
+
+function calcAliceCredentials() {
+  console.log("calcAliceCredentials");
+  let temp = "";
+  temp = CryptoJS.SHA256(getAliceSeed());
+  $('#alicePrivKey').val(temp);
+  temp = CryptoJS.SHA256(temp);
+  $('#alicePubKey').val(temp);
+  temp = CryptoJS.SHA256(temp).toString().substr(0,32);
+  $('#alicePKH').val(temp);
+}
+
+
+
 function updateHash(block, chain) {
   // update the SHA256 hash value for this block
   $('#block'+block+'chain'+chain+'hash').val(sha256(block, chain));

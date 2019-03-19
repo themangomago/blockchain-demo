@@ -1,0 +1,25 @@
+.well
+  form.form-horizontal
+    fieldset
+      legend Wallet  
+      .form-group
+        label.col-sm-2.control-label() Seed:
+        .col-sm-10
+          input.form-control(id='bobSeed', type='text', value='Enter Seed', onkeyup='calcBobCredentials();')
+      .form-group
+        label.col-sm-2.control-label() Private Key:
+        .col-sm-10
+          input.form-control(id='bobPrivKey', type='text', value='', onkeyup='')
+      .form-group
+        label.col-sm-2.control-label() Public Key:
+        .col-sm-10
+          input.form-control(id='bobPubKey', type='text', value='', onkeyup='')
+      .form-group
+        label.col-sm-2.control-label() Public Key Hash (PKH):
+        .col-sm-10
+          input.form-control(id='bobPKH', type='text', value='', onkeyup='')
+      hr
+      .form-group
+        label.col-sm-2.control-label() Balance:
+        .col-sm-10
+          input.form-control(id='bobBalance', type='text', value='0.00', onkeyup='')

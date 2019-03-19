@@ -1,0 +1,9 @@
+.input-group
+  select.form-control(id='line1')
+    option(value="nothing") ---
+    option(value="CLAIM") CLAIM
+    option(value="SPEND") SPEND
+  .input-group-addon ---
+  input.form-control(id='d', type='text', value='#{tx.field1}')
+  .input-group-addon ---
+  input.form-control(id='d', type='text', value='#{tx.field2}')

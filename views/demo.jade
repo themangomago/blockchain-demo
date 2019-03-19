@@ -2,16 +2,49 @@ extends layout
 
 block content
   .container-fluid
+
+    .row
+      .col-sm-4
+        h1 Alice
+        include includes/alicewallet.jade
+
+      .col-sm-4
+        h1 &nbsp;
+        .well
+          form.form-horizontal
+            h2 Transaction
+            div(id="transactions")
+              - let txList = []
+              - txList.push({type: 'nothing', field1: '---', field2: '---'})
+              - let tx = txList[0]
+              include includes/transaction.jade
+      .col-sm-4
+        h1 Bob
+        include includes/bobwallet.jade
+
+    .row
+      .col-sm-4
+        h1 
+          button.btn.btn-primary(data-toggle="collapse", data-target='#miner')
+            span toggle
+          span Michael (Miner)
+        .collapse(id='miner')
+          - var block = {block: 1, chain: chain, nonce: 16651, coinbasevalue: '100.00', coinbaseto: 'Anders', txs: [], previous: '0000000000000000000000000000000000000000000000000000000000000000'}
+          include includes/minerblock.jade
+
+
+
+
+
     h1 #{__('Vector Blockchain')}
-    p text ole <br> test
     - var peers = {1: 'A'}
     - each peer, chain in peers
      
-      .row.row-horizon
+      .row.row-horizon(id = 'blockchainWindow')
         - var blocks = []
+        - blocks.push({block: 3, chain: chain, nonce: 146, coinbasevalue: '100.00', coinbaseto: 'Anders', txs: [{value: '10.00', from: 'Emily', to: 'Jackson'},{value: '5.00', from: 'Madison', to: 'Jackson'},{value: '20.00', from: 'Lucas', to: 'Alice'}], previous: '0003fb6ec96ff4dc315e9c813742fb433'})
+        - blocks.push({block: 2, chain: chain, nonce: 215458, coinbasevalue: '100.00', coinbaseto: 'Lucas', txs: [{value: '10.00', from: 'Anders', to: 'Alice'},{value: '20.00', from: 'Anders', to: 'Lucas'},{value: '15.00', from: 'Anders', to: 'Emily'},{value: '15.00', from: 'Anders', to: 'Madison'}], previous: '1000438d7625b86a6f366545b1929975a0d3ff1f8847e56cc587cadddb0ab781'})
         - blocks.push({block: 1, chain: chain, nonce: 16651, coinbasevalue: '100.00', coinbaseto: 'Anders', txs: [], previous: '0000000000000000000000000000000000000000000000000000000000000000'})
-        - blocks.push({block: 2, chain: chain, nonce: 215458, coinbasevalue: '100.00', coinbaseto: 'Lucas', txs: [{value: '10.00', from: 'Anders', to: 'Sophia'},{value: '20.00', from: 'Anders', to: 'Lucas'},{value: '15.00', from: 'Anders', to: 'Emily'},{value: '15.00', from: 'Anders', to: 'Madison'}], previous: '1000438d7625b86a6f366545b1929975a0d3ff1f8847e56cc587cadddb0ab781'})
-        - blocks.push({block: 3, chain: chain, nonce: 146, coinbasevalue: '100.00', coinbaseto: 'Anders', txs: [{value: '10.00', from: 'Emily', to: 'Jackson'},{value: '5.00', from: 'Madison', to: 'Jackson'},{value: '20.00', from: 'Lucas', to: 'Grace'}], previous: '0003fb6ec96ff4dc315e9c813742fb433'})
         each block in blocks
           .col-xs-7
             include includes/demoblock.jade
@@ -19,6 +52,7 @@ block content
 
   script.
     $(function() {
+      calcAliceCredentials(); //Init Alice Key Credentials
       setup(1, 1);
       setup(2, 1);
       setup(3, 1);
@@ -53,3 +87,13 @@ block content
             }, 250); // give UI time to update
         });
     }
+
+    function getBobSeed() {
+      return $('#bobSeed').val();
+    }
+
+    function getAliceSeed() {
+      return $('#aliceSeed').val();
+    }
+
+
