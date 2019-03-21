@@ -1,6 +1,9 @@
 .well(id='block#{block.block}chain#{block.chain}well')
   form.form-horizontal
-    h2 Block ##{block.block}
+    h2 
+      
+      text Block ##{block.block}
+      i(id='block#{block.block}chain#{block.chain}icon')
 
     fieldset.header
       legend Header
@@ -18,9 +21,9 @@
           input.form-control(id='block#{block.block}chain#{block.chain}previous', type='text', value='#{block.previous}')
 
       #state.form-group
-        label.col-sm-2.control-label(for='block#{block.block}chain#{block.chain}previous') Hash Tree over Data:
+        label.col-sm-2.control-label(for='block#{block.block}chain#{block.chain}data') Hash Tree over Data:
         .col-sm-10
-          input.form-control(id='block#{block.block}chain#{block.chain}previous', type='text', value='#{block.previous}')
+          input.form-control(id='block#{block.block}chain#{block.chain}data', type='text', value='#{block.previous}')
 
 
     fieldset.data
@@ -44,11 +47,14 @@
             .input-group
               .input-group-addon #{__('id')}
               input.form-control(id='block#{block.block}chain#{block.chain}tx#{x}id', style='width:48px;', type='text', value='#{index}')
-              .input-group-addon #{__('$')}
+              .input-group-addon
+                i.demo-icon.icon-bitcoin
               input.form-control(id='block#{block.block}chain#{block.chain}tx#{x}value', type='text', value='#{tx.value}', onkeyup='updateChain(#{block.block}, #{block.chain});')
-              .input-group-addon #{__('From')}:
+              .input-group-addon
+                i.demo-icon.icon-user
               input.form-control(id='block#{block.block}chain#{block.chain}tx#{x}from', type='text', value='#{tx.from}', onkeyup='updateChain(#{block.block}, #{block.chain});')
-              .input-group-addon -&gt;
+              .input-group-addon
+                i.demo-icon.icon-right-big
               input.form-control(id='block#{block.block}chain#{block.chain}tx#{x}to', type='text', value='#{tx.to}', onkeyup='updateChain(#{block.block}, #{block.chain});')
             - index += 1;
 

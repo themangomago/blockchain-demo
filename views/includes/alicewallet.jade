@@ -1,7 +1,9 @@
 .well
   form.form-horizontal
     fieldset
-      legend Wallet  
+      legend
+        i.demo-icon.icon-wallet
+        text Alice
       .form-group
         label.col-sm-2.control-label() Seed:
         .col-sm-10
@@ -17,9 +19,9 @@
       .form-group
         label.col-sm-2.control-label() Public Key Hash (PKH):
         .col-sm-10
-          input.form-control(id='alicePKH', type='text', value='', onkeyup='' disabled)
+          input.form-control(id='alicePKH', type='text', value='', onkeyup='')
       hr
       .form-group
         label.col-sm-2.control-label() Balance:
         .col-sm-10
-          input.form-control(id='aliceBalance', type='text', value='0.00', onkeyup='')
+          input.form-control(id='aliceBalance', type='text', value='25.00', onkeyup='')

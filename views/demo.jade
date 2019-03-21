@@ -2,52 +2,76 @@ extends layout
 
 block content
   .container-fluid
-
-    .row
+    h1
+      i.font-size24.demo-icon.icon-down-open(id="walletButton")
+      text Wallets
+    .row(id="walletContainer")
       .col-sm-4
-        h1 Alice
+       
         include includes/alicewallet.jade
 
       .col-sm-4
-        h1 &nbsp;
         .well
           form.form-horizontal
             h2 Transaction
-            div(id="transactions")
-              - let txList = []
-              - txList.push({type: 'nothing', field1: '---', field2: '---'})
-              - let tx = txList[0]
+              - var txList = [];
+              - txList.push({reference:'0', field1: '---', field2: '---'});
+              - txList.push({reference:'1', field1: '---', field2: '---'});
+              - txList.push({reference:'2', field1: '---', field2: '---'});
+              - txList.push({reference:'3', field1: '---', field2: '---'});
+              - let tx
+            div(id="tx0")
+              - tx = txList[0]
               include includes/transaction.jade
+            div(id="tx1")
+              - tx = txList[1]
+              include includes/transaction.jade
+            div(id="tx2")
+              - tx = txList[2]
+              include includes/transaction.jade
+            div(id="tx3")
+              - tx = txList[3]
+              include includes/transaction.jade
+            .row
+              .col-sm-6
+                p(id="txStatus") In: 0 Out: 0 Fee: 0
+              .col-sm-6
+                .btn-toolbar
+                  button.float-right.btn.btn-primary(type="button", onclick='txClear();')
+                    span Clear
+                  button.btn.btn-primary(type="button", onclick='txSend();')
+                    span Broadcast
+              
+
       .col-sm-4
-        h1 Bob
         include includes/bobwallet.jade
 
     .row
       .col-sm-4
         h1 
-          button.btn.btn-primary(data-toggle="collapse", data-target='#miner')
-            span toggle
-          span Michael (Miner)
-        .collapse(id='miner')
-          - var block = {block: 1, chain: chain, nonce: 16651, coinbasevalue: '100.00', coinbaseto: 'Anders', txs: [], previous: '0000000000000000000000000000000000000000000000000000000000000000'}
+          i.font-size24.demo-icon.icon-down-open(id="minerButton")
+          text Miners
+        div(id="minerContainer")
+          - var block = {block: 1, chain: chain, nonce: 0, coinbasevalue: '100.00', coinbaseto: 'PKH(Michael)', txs: [], previous: '0000000000000000000000000000000000000000000000000000000000000000'}
           include includes/minerblock.jade
 
 
-
-
-
-    h1 #{__('Vector Blockchain')}
-    - var peers = {1: 'A'}
-    - each peer, chain in peers
-     
-      .row.row-horizon(id = 'blockchainWindow')
-        - var blocks = []
-        - blocks.push({block: 3, chain: chain, nonce: 146, coinbasevalue: '100.00', coinbaseto: 'Anders', txs: [{value: '10.00', from: 'Emily', to: 'Jackson'},{value: '5.00', from: 'Madison', to: 'Jackson'},{value: '20.00', from: 'Lucas', to: 'Alice'}], previous: '0003fb6ec96ff4dc315e9c813742fb433'})
-        - blocks.push({block: 2, chain: chain, nonce: 215458, coinbasevalue: '100.00', coinbaseto: 'Lucas', txs: [{value: '10.00', from: 'Anders', to: 'Alice'},{value: '20.00', from: 'Anders', to: 'Lucas'},{value: '15.00', from: 'Anders', to: 'Emily'},{value: '15.00', from: 'Anders', to: 'Madison'}], previous: '1000438d7625b86a6f366545b1929975a0d3ff1f8847e56cc587cadddb0ab781'})
-        - blocks.push({block: 1, chain: chain, nonce: 16651, coinbasevalue: '100.00', coinbaseto: 'Anders', txs: [], previous: '0000000000000000000000000000000000000000000000000000000000000000'})
-        each block in blocks
-          .col-xs-7
-            include includes/demoblock.jade
+    h1
+      i.font-size24.demo-icon.icon-down-open(id="chainButton")
+      text #{__('Blockchain')}
+    div(id="chainContainer")
+      - var peers = {1: 'A'}
+      - each peer, chain in peers
+      
+        .row.row-horizon(id = 'blockchainWindow')
+          - var blocks = []
+          - blocks.push({block: 4, chain: chain, nonce: 146, coinbasevalue: '100.00', coinbaseto: 'PKH(Anders)', txs: [{value: '10.00', from: 'PKH(Emily)', to: 'PKH(Jackson)'},{value: '5.00', from: 'Madison', to: 'Jackson'},{value: '20.00', from: 'Lucas', to: 'Alice'}], previous: '0003fb6ec96ff4dc315e9c813742fb433'})
+          - blocks.push({block: 3, chain: chain, nonce: 146, coinbasevalue: '100.00', coinbaseto: 'PKH(Anders)', txs: [{value: '10.00', from: 'PKH(Emily)', to: 'PKH(Jackson)'},{value: '5.00', from: 'Madison', to: 'Jackson'},{value: '20.00', from: 'Lucas', to: 'Alice'}], previous: '0003fb6ec96ff4dc315e9c813742fb433'})
+          - blocks.push({block: 2, chain: chain, nonce: 215458, coinbasevalue: '100.00', coinbaseto: 'Lucas', txs: [{value: '10.00', from: 'Anders', to: 'Alice'},{value: '20.00', from: 'Anders', to: 'Lucas'},{value: '15.00', from: 'Anders', to: 'Emily'},{value: '15.00', from: 'Anders', to: 'Madison'}], previous: '1000438d7625b86a6f366545b1929975a0d3ff1f8847e56cc587cadddb0ab781'})
+          - blocks.push({block: 1, chain: chain, nonce: 16651, coinbasevalue: '100.00', coinbaseto: 'Anders', txs: [], previous: '0000000000000000000000000000000000000000000000000000000000000000'})
+          each block in blocks
+            .col-xs-7(id="container#{block.block}")
+              include includes/demoblock.jade
 
 
   script.
@@ -56,10 +80,161 @@ block content
       setup(1, 1);
       setup(2, 1);
       setup(3, 1);
+      
+      $('#container4').hide();
+      $('#block1chain2previous').val($('#block3chain1hash').val());
+
     });
 
+
+    $("#walletButton").click(function() { $("#walletContainer").slideToggle("slow"); $('#walletButton').toggleClass("icon-right-open"); });
+    $("#minerButton").click(function() { $("#minerContainer").slideToggle("slow"); $('#minerButton').toggleClass("icon-right-open"); });
+    $("#chainButton").click(function() { $("#chainContainer").slideToggle("slow"); $('#chainButton').toggleClass("icon-right-open"); });
+  
+
+    function txClear() {
+      for (let i = 0; i < 4; i++) { 
+        $('#txSelect'+i).val("nothing");
+        txOnChange(i);
+      }
+    }
+
+
+    function txSend() {
+      console.log("txSend");
+      //TODO input checks
+      let txIn = 0;
+      let txOut = 0;
+      let inputTypes = [$('#txSelect0').val(), $('#txSelect1').val(), $('#txSelect2').val(), $('#txSelect3').val()];
+      let txEntries = [];
+      inputTypes.forEach( (obj, index) => {
+        if (obj == "CLAIM") {
+          txIn -= (- $('#txIn'+index).val());
+        }
+        if (obj == "SPEND") {
+          txOut -= (- $('#txForm2_'+index).val());
+          let addr = $('#txForm1_'+index).val();
+
+          if (addr == $('#alicePKH').val()) {
+            addr = "PKH(Alice)";
+          } else if (addr == $('#bobPKH').val()) {
+            addr = "PKH(Bob)";
+          } else {
+            addr = "PKH(Unknown)";
+          }
+
+          txEntries.push({amount: $('#txForm2_'+index).val() ,to: addr});
+        }
+      });
+
+      let htmlString = "";
+
+      txEntries.forEach((entry, index) => {
+       htmlString += '<div class="input-group">\
+                        <div class="input-group-addon">id</div><input id="block4chain1tx'+index+'id" style="width:48px;" value="'+index+'" class="form-control" type="text">\
+                        <div class="input-group-addon"><i class="demo-icon icon-bitcoin"></i></div><input id="block4chain1tx'+index+'value" value="'+entry.amount+'" onkeyup="updateChain(4, 1);" class="form-control" type="text">\
+                        <div class="input-group-addon"><i class="demo-icon icon-user"></i></div><input id="block4chain1tx'+index+'from" value="PKH(Alice)" onkeyup="updateChain(4, 1);" class="form-control" type="text">\
+                        <div class="input-group-addon"><i class="demo-icon icon-right-big"></i></div><input id="block4chain1tx'+index+'to" value="'+entry.to+'" onkeyup="updateChain(4, 1);" class="form-control" type="text">\
+                      </div>';
+      });
+      $('#minerblockTx').html(htmlString);
+      txHashOverData();
+    }
+
+
+
+    function txHashOverData() {
+      //TODO call when manipulating data in tx
+      $('#block1chain2data').val(CryptoJS.SHA256($('#minerblockTx').text()));
+    }
+
+    function txMineBlock(block, chain, isChain) {
+      for (var x = 0; x <= maximumNonce; x++) {
+        $('#block'+block+'chain'+chain+'nonce').val(x);
+        $('#block'+block+'chain'+chain+'hash').val(sha256(block, chain));
+        if ($('#block'+block+'chain'+chain+'hash').val().substr(0, difficulty) === pattern) {
+          if (isChain) {
+            updateChain(block, chain);
+          }
+          else {
+            updateState(block, chain);
+          }
+          break;
+        }
+      }
+    }
+
+
+    function txOnChange(id) {
+      let changeTo = $('#txSelect'+id).val();
+
+      switch (changeTo) {
+        case "CLAIM":
+          $('#txForm1Addon_'+id).text('Sign');
+          $('#txForm1Placeholder'+id).html('\
+            <select class="form-control" id="txIn'+id+'" onchange="txOnChangeTx('+id+');"> \
+              <option value="0">Input Tx</option> \
+              <option value="10">Block:#1 Tx:#2 Amount:10.0</option> \
+              <option value="15">Block:#2 Tx:#1 Amount:15.0</option> \
+            </select>');
+          $('#txForm2Addon_'+id).text('PubKey');
+          $('#txForm2_'+id).val($('#alicePubKey').val());
+          break;
+        case "SPEND":
+          $('#txForm1Addon_'+id).text('Addr');
+          $('#txForm1Placeholder'+id).html('<input id="txForm1_'+id+'" value="" class="form-control" type="text">');
+          $('#txForm2Addon_'+id).text('Amount');
+          $('#txForm2_'+id).val('0');
+          break;
+        default:
+          $('#txForm1Addon_'+id).text('---')
+          $('#txForm1Placeholder'+id).html('<input id="txForm1_'+id+'" value="---" class="form-control" type="text">');
+          $('#txForm2Addon_'+id).text('---')
+          $('#txForm2_'+id).val('---');
+          break;
+      }
+
+
+
+    }
+
+    function txOnChangeTx(id) {
+      checkTransaction();
+    }
+
+
+    function checkTransaction() {
+      console.log("checkTransaction");
+      //keeping things simple.. only 2 utxos are allowed
+      let txIn = 0;
+      let txOut = 0;
+      let inputTypes = [$('#txSelect0').val(), $('#txSelect1').val(), $('#txSelect2').val(), $('#txSelect3').val()];
+
+      inputTypes.forEach( (obj, index) => {
+        if (obj == "CLAIM") {
+          txIn -= (- $('#txIn'+index).val());
+        }
+        if (obj == "SPEND") {
+          txOut -= (- $('#txForm2_'+index).val());
+        }
+      });
+
+      $('#txStatus').text("In: "+txIn+ " Out: " + txOut + " Fee: " + (Math.max(0, txIn - txOut)).toPrecision(2));
+
+
+      //TODO plausilibty checks
+
+
+
+    }
+
+
+    function mineNewBlock() {
+      $('#container4').slideDown();
+    }
+
+
     function getText(block, chain) {
-      console.log("req: "+block + " on chain:" +chain);
       var s = $('#block'+block+'chain'+chain+'number').val() +
               $('#block'+block+'chain'+chain+'nonce').val() +
               $('#block'+block+'chain'+chain+'coinbasevalue').val() +
@@ -95,5 +270,8 @@ block content
     function getAliceSeed() {
       return $('#aliceSeed').val();
     }
+
+
+
 
 

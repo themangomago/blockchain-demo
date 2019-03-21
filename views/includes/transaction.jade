@@ -1,9 +1,10 @@
 .input-group
-  select.form-control(id='line1')
+  select.form-control(id='txSelect#{tx.reference}', onchange="txOnChange(#{tx.reference});")
     option(value="nothing") ---
     option(value="CLAIM") CLAIM
     option(value="SPEND") SPEND
-  .input-group-addon ---
-  input.form-control(id='d', type='text', value='#{tx.field1}')
-  .input-group-addon ---
-  input.form-control(id='d', type='text', value='#{tx.field2}')
+  .input-group-addon(id='txForm1Addon_#{tx.reference}') ---
+  div(id='txForm1Placeholder#{tx.reference}')
+    input.form-control(id='txForm1_#{tx.reference}', type='text', value='#{tx.field1}')
+  .input-group-addon(id='txForm2Addon_#{tx.reference}') ---
+  input.form-control(id='txForm2_#{tx.reference}', type='text', value='#{tx.field2}', onkeyup="checkTransaction();")

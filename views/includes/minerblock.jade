@@ -1,26 +1,26 @@
-.well(id='block#{block.block}chain#{block.chain}well')
+.well(id='block1chain2well')
   form.form-horizontal
-    h2 Block ##{block.block}
+    h2
+      i.demo-icon.icon-wrench
+      text Michael
 
     fieldset.header
       legend Header
 
       .form-group
-        label.col-sm-2.control-label(for='block#{block.block}chain#{block.chain}nonce') Nonce:
+        label.col-sm-2.control-label(for='block1chain2nonce') Nonce:
         .col-sm-10
-          input.form-control(id='block#{block.block}chain#{block.chain}nonce', type='text', value='#{block.nonce}', onkeyup='updateChain(#{block.block}, #{block.chain});')
-
-
+          input.form-control(id='block1chain2nonce', type='text', value='0', onkeyup='updateChain(1, 2);')
 
       #state.form-group
-        label.col-sm-2.control-label(for='block#{block.block}chain#{block.chain}previous') Prev. Hash:
+        label.col-sm-2.control-label(for='block1chain2previous') Prev. Hash:
         .col-sm-10
-          input.form-control(id='block#{block.block}chain#{block.chain}previous', type='text', value='#{block.previous}')
+          input.form-control(id='block1chain2previous', type='text', value='#{block.previous}')
 
       #state.form-group
-        label.col-sm-2.control-label(for='block#{block.block}chain#{block.chain}previous') Hash Tree over Data:
+        label.col-sm-2.control-label(for='block1chain2data') Hash Tree over Data:
         .col-sm-10
-          input.form-control(id='block#{block.block}chain#{block.chain}previous', type='text', value='#{block.previous}')
+          input.form-control(id='block1chain2data', type='text', value='#{block.previous}')
 
 
     fieldset.data
@@ -31,40 +31,39 @@
         .col-sm-10
           .input-group
             .input-group-addon $
-            input.form-control(id='block#{block.block}chain#{block.chain}coinbasevalue', type='text', value='#{block.coinbasevalue}', onkeyup='updateChain(#{block.block}, #{block.chain});')
+            input.form-control(id='block1chain2coinbasevalue', type='text', value='#{block.coinbasevalue}', onkeyup='updateChain(1, 2);')
             .input-group-addon -&gt;
-            input.form-control(id='block#{block.block}chain#{block.chain}coinbaseto', type='text', value='#{block.coinbaseto}', onkeyup='updateChain(#{block.block}, #{block.chain});')
+            input.form-control(id='block1chain2coinbaseto', type='text', value='#{block.coinbaseto}', onkeyup='updateChain(1, 2);')
 
 
       .form-group
         label.col-sm-2.control-label Tx:
-        .col-sm-10
+        .col-sm-10(id="minerblockTx")
           - var index = 0;
           - each tx, x in block.txs
             .input-group
               .input-group-addon #{__('id')}
-              input.form-control(id='block#{block.block}chain#{block.chain}tx#{x}id', style='width:48px;', type='text', value='#{index}')
+              input.form-control(id='block1chain2tx#{x}id', style='width:48px;', type='text', value='#{index}')
               .input-group-addon #{__('$')}
-              input.form-control(id='block#{block.block}chain#{block.chain}tx#{x}value', type='text', value='#{tx.value}', onkeyup='updateChain(#{block.block}, #{block.chain});')
+              input.form-control(id='block1chain2tx#{x}value', type='text', value='#{tx.value}', onkeyup='updateChain(1, 2);')
               .input-group-addon #{__('From')}:
-              input.form-control(id='block#{block.block}chain#{block.chain}tx#{x}from', type='text', value='#{tx.from}', onkeyup='updateChain(#{block.block}, #{block.chain});')
+              input.form-control(id='block1chain2tx#{x}from', type='text', value='#{tx.from}', onkeyup='updateChain(1, 2);')
               .input-group-addon -&gt;
-              input.form-control(id='block#{block.block}chain#{block.chain}tx#{x}to', type='text', value='#{tx.to}', onkeyup='updateChain(#{block.block}, #{block.chain});')
+              input.form-control(id='block1chain2tx#{x}to', type='text', value='#{tx.to}', onkeyup='updateChain(1, 2);')
             - index += 1;
 
 
 
     #state.form-group.mine-field
 
-      label.col-sm-2.control-label(for='block#{block.block}chain#{block.chain}hash') Hash over Header:
+      label.col-sm-2.control-label(for='block1chain2hash') Hash over Header:
       .col-sm-10
 
- 
-          input.form-control(id='block#{block.block}chain#{block.chain}hash', type='text' )
+          input.form-control(id='block1chain2hash', type='text' )
+          .btn-toolbar
+            i.icon-spinner.icon-spin.icon-large
+            button.btn.btn-primary.ladda-button(id='block1chain2mineButton', data-style='expand-right', onclick="txMineBlock();", type="button")
+              span.ladda-label #{__('Mine')}
 
-          i.icon-spinner.icon-spin.icon-large
-          button.btn.btn-primary.ladda-button(id='block#{block.block}chain#{block.chain}mineButton', data-style='expand-right')
-            span.ladda-label #{__('Mine')}
-
-           button.btn.btn-primary
-            span Propagade
+            button.btn.btn-primary( onclick="mineNewBlock();", type="button")
+              span Broadcast

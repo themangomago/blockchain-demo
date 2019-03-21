@@ -25,10 +25,13 @@ function sha256(block, chain) {
 function updateState(block, chain) {
   // set the well background red or green for this block
   if ($('#block'+block+'chain'+chain+'hash').val().substr(0, difficulty) === pattern) {
-    $('#block'+block+'chain'+chain+'well').removeClass('well-error').addClass('well-success');
+    //$('#block'+block+'chain'+chain+'well').removeClass('well-error').addClass('well-success');
+    $('#block'+block+'chain'+chain+'icon').html('<i class="demo-icon icon-ok color-success"></i>');
+
   }
   else {
-    $('#block'+block+'chain'+chain+'well').removeClass('well-success').addClass('well-error');
+    //$('#block'+block+'chain'+chain+'well').removeClass('well-success').addClass('well-error');
+    $('#block'+block+'chain'+chain+'icon').html('<i class="demo-icon icon-cancel color-error"></i>');
   }
 }
 
@@ -58,6 +61,7 @@ function calcAliceCredentials() {
   temp = CryptoJS.SHA256(temp).toString().substr(0,32);
   $('#alicePKH').val(temp);
 }
+
 
 
 
