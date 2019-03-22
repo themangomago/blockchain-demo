@@ -77,6 +77,12 @@
       "css": "user",
       "code": 59402,
       "src": "entypo"
+    },
+    {
+      "uid": "48b87105bd38c20315f1b705b8c7b38c",
+      "css": "list",
+      "code": 59403,
+      "src": "fontawesome"
     }
   ]
 }

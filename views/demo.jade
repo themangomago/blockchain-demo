@@ -13,7 +13,9 @@ block content
       .col-sm-4
         .well
           form.form-horizontal
-            h2 Transaction
+            h2 
+              i.demo-icon.icon-list
+              text Transaction
               - var txList = [];
               - txList.push({reference:'0', field1: '---', field2: '---'});
               - txList.push({reference:'1', field1: '---', field2: '---'});
@@ -52,7 +54,7 @@ block content
           i.font-size24.demo-icon.icon-down-open(id="minerButton")
           text Miners
         div(id="minerContainer")
-          - var block = {block: 1, chain: chain, nonce: 0, coinbasevalue: '100.00', coinbaseto: 'PKH(Michael)', txs: [], previous: '0000000000000000000000000000000000000000000000000000000000000000'}
+          - var block = {block: 1, chain: chain, nonce: 0, coinbasevalue: '50', coinbaseto: 'PKH(Michael)', txs: [], previous: '0000000000000000000000000000000000000000000000000000000000000000'}
           include includes/minerblock.jade
 
 
@@ -65,10 +67,10 @@ block content
       
         .row.row-horizon(id = 'blockchainWindow')
           - var blocks = []
-          - blocks.push({block: 4, chain: chain, nonce: 146, coinbasevalue: '100.00', coinbaseto: 'PKH(Anders)', txs: [{value: '10.00', from: 'PKH(Emily)', to: 'PKH(Jackson)'},{value: '5.00', from: 'Madison', to: 'Jackson'},{value: '20.00', from: 'Lucas', to: 'Alice'}], previous: '0003fb6ec96ff4dc315e9c813742fb433'})
-          - blocks.push({block: 3, chain: chain, nonce: 146, coinbasevalue: '100.00', coinbaseto: 'PKH(Anders)', txs: [{value: '10.00', from: 'PKH(Emily)', to: 'PKH(Jackson)'},{value: '5.00', from: 'Madison', to: 'Jackson'},{value: '20.00', from: 'Lucas', to: 'Alice'}], previous: '0003fb6ec96ff4dc315e9c813742fb433'})
-          - blocks.push({block: 2, chain: chain, nonce: 215458, coinbasevalue: '100.00', coinbaseto: 'Lucas', txs: [{value: '10.00', from: 'Anders', to: 'Alice'},{value: '20.00', from: 'Anders', to: 'Lucas'},{value: '15.00', from: 'Anders', to: 'Emily'},{value: '15.00', from: 'Anders', to: 'Madison'}], previous: '1000438d7625b86a6f366545b1929975a0d3ff1f8847e56cc587cadddb0ab781'})
-          - blocks.push({block: 1, chain: chain, nonce: 16651, coinbasevalue: '100.00', coinbaseto: 'Anders', txs: [], previous: '0000000000000000000000000000000000000000000000000000000000000000'})
+          - blocks.push({block: 4, chain: chain, nonce: 146, coinbasevalue: '50', coinbaseto: 'PKH(Doris)', txs: [], previous: '0003fb6ec96ff4dc315e9c813742fb433', data: '0101'})
+          - blocks.push({block: 3, chain: chain, nonce: 4021, coinbasevalue: '50', coinbaseto: 'PKH(Doris)', txs: [{value: '1.00', from: 'PKH(Charlie)', to: 'PKH(Emil)'},{value: '14.00', from: 'PKH(Charlie)', to: 'PKH(Alice)'},{value: '50.00', from: 'PKH(Michael)', to: 'PKH(Charlie)'}], previous: '00094a282fcd7c54fc1cc7a95bd251aa40c396a96329e5d94f28cb8751b7aaf2', data: '5eefdce656df6f7c33bef3767f677f140e5d88294e382112ba83c010beae4f0a'})
+          - blocks.push({block: 2, chain: chain, nonce: 7514, coinbasevalue: '50', coinbaseto: 'PKH(Michael)', txs: [{value: '10.00', from: 'PKH(Satoshi)', to: 'PKH(Alice)'},{value: '15.00', from: 'PKH(Satoshi)', to: 'PKH(Charlie)'},{value: '5.00', from: 'PKH(Satoshi)', to: 'PKH(Doris)'},{value: '20.00', from: 'PKH(Satoshi)', to: 'PKH(Satoshi)'}], previous: '000716af3c468410f74e269ef28941026685b311421fc8c032c00bcb5b11d805', data: 'c2154159efa685189bd6d7eff73db4158745f467b9df927c5688cff83e91e40a'})
+          - blocks.push({block: 1, chain: chain, nonce: 689, coinbasevalue: '50', coinbaseto: 'PKH(Satoshi)', txs: [], previous: '0000000000000000000000000000000000000000000000000000000000000000', data: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'})
           each block in blocks
             .col-xs-7(id="container#{block.block}")
               include includes/demoblock.jade
@@ -80,17 +82,29 @@ block content
       setup(1, 1);
       setup(2, 1);
       setup(3, 1);
+      setup(4, 1);
       
       $('#container4').hide();
       $('#block1chain2previous').val($('#block3chain1hash').val());
 
     });
 
+    let balanceNewAlice = $('#aliceBalance').val();
+    let balanceNewBob = $('#bobBalance').val();
 
     $("#walletButton").click(function() { $("#walletContainer").slideToggle("slow"); $('#walletButton').toggleClass("icon-right-open"); });
     $("#minerButton").click(function() { $("#minerContainer").slideToggle("slow"); $('#minerButton').toggleClass("icon-right-open"); });
     $("#chainButton").click(function() { $("#chainContainer").slideToggle("slow"); $('#chainButton').toggleClass("icon-right-open"); });
   
+      $('#block1chain2mineButton').click(function(e) {
+          e.preventDefault();
+          var l = Ladda.create(this);
+          l.start();
+          setTimeout(function() {
+              minerBlockMine();
+              l.stop();
+            }, 250); // give UI time to update
+        });
 
     function txClear() {
       for (let i = 0; i < 4; i++) { 
@@ -119,8 +133,11 @@ block content
             addr = "PKH(Alice)";
           } else if (addr == $('#bobPKH').val()) {
             addr = "PKH(Bob)";
+            balanceNewAlice -= ($('#txForm2_'+index).val());
+            balanceNewBob -= (-$('#txForm2_'+index).val());
           } else {
             addr = "PKH(Unknown)";
+            balanceNewAlice -= ($('#txForm2_'+index).val());
           }
 
           txEntries.push({amount: $('#txForm2_'+index).val() ,to: addr});
@@ -146,22 +163,9 @@ block content
     function txHashOverData() {
       //TODO call when manipulating data in tx
       $('#block1chain2data').val(CryptoJS.SHA256($('#minerblockTx').text()));
-    }
 
-    function txMineBlock(block, chain, isChain) {
-      for (var x = 0; x <= maximumNonce; x++) {
-        $('#block'+block+'chain'+chain+'nonce').val(x);
-        $('#block'+block+'chain'+chain+'hash').val(sha256(block, chain));
-        if ($('#block'+block+'chain'+chain+'hash').val().substr(0, difficulty) === pattern) {
-          if (isChain) {
-            updateChain(block, chain);
-          }
-          else {
-            updateState(block, chain);
-          }
-          break;
-        }
-      }
+
+      //TODO this results in different calculations when broadcasted into chain
     }
 
 
@@ -174,8 +178,8 @@ block content
           $('#txForm1Placeholder'+id).html('\
             <select class="form-control" id="txIn'+id+'" onchange="txOnChangeTx('+id+');"> \
               <option value="0">Input Tx</option> \
-              <option value="10">Block:#1 Tx:#2 Amount:10.0</option> \
-              <option value="15">Block:#2 Tx:#1 Amount:15.0</option> \
+              <option value="10">Block:#2 Tx:#0 Amount:10.0</option> \
+              <option value="15">Block:#3 Tx:#1 Amount:14.0</option> \
             </select>');
           $('#txForm2Addon_'+id).text('PubKey');
           $('#txForm2_'+id).val($('#alicePubKey').val());
@@ -224,13 +228,29 @@ block content
 
       //TODO plausilibty checks
 
-
-
     }
 
 
-    function mineNewBlock() {
+
+    function broadcastNewBlock() {
+
+      //update balances
+      $('#aliceBalance').val(balanceNewAlice);
+      $('#bobBalance').val(balanceNewBob);
+
+      //data transition miner
+      $('#block4chain1nonce').val($('#block1chain2nonce').val());
+      $('#block4chain1previous').val($('#block1chain2previous').val());
+      $('#block4chain1data').val($('#block1chain2data').val());
+      $('#block4chain1txData').html($('#minerblockTx').html());
+      $('#block4chain1hash').val($('#block1chain2hash').val());
+
+      //set tick
+      $('#block4chain1icon').html('<i class="demo-icon icon-ok color-success"></i>');
+
       $('#container4').slideDown();
+
+      //clear and update miner block
     }
 
 
@@ -238,7 +258,8 @@ block content
       var s = $('#block'+block+'chain'+chain+'number').val() +
               $('#block'+block+'chain'+chain+'nonce').val() +
               $('#block'+block+'chain'+chain+'coinbasevalue').val() +
-              $('#block'+block+'chain'+chain+'coinbaseto').val();
+              $('#block'+block+'chain'+chain+'coinbaseto').val() +
+              $('#block'+block+'chain'+chain+'data').val();
 
       for (var x=0; $('#block'+block+'chain'+chain+'tx'+x+'value').length > 0; x++) {
         s = s + $('#block'+block+'chain'+chain+'tx'+x+'value').val() +

@@ -23,7 +23,7 @@
       #state.form-group
         label.col-sm-2.control-label(for='block#{block.block}chain#{block.chain}data') Hash Tree over Data:
         .col-sm-10
-          input.form-control(id='block#{block.block}chain#{block.chain}data', type='text', value='#{block.previous}')
+          input.form-control(id='block#{block.block}chain#{block.chain}data', type='text', value='#{block.data}')
 
 
     fieldset.data
@@ -33,15 +33,17 @@
         label.col-sm-2.control-label Coinbase:
         .col-sm-10
           .input-group
-            .input-group-addon $
+            .input-group-addon
+              i.demo-icon.icon-bitcoin
             input.form-control(id='block#{block.block}chain#{block.chain}coinbasevalue', type='text', value='#{block.coinbasevalue}', onkeyup='updateChain(#{block.block}, #{block.chain});')
-            .input-group-addon -&gt;
+            .input-group-addon
+              i.demo-icon.icon-right-big
             input.form-control(id='block#{block.block}chain#{block.chain}coinbaseto', type='text', value='#{block.coinbaseto}', onkeyup='updateChain(#{block.block}, #{block.chain});')
 
 
       .form-group
         label.col-sm-2.control-label Tx:
-        .col-sm-10
+        .col-sm-10(id="block#{block.block}chain#{block.chain}txData")
           - var index = 0;
           - each tx, x in block.txs
             .input-group

@@ -22,6 +22,7 @@ function sha256(block, chain) {
   return CryptoJS.SHA256(getText(block, chain));
 }
 
+
 function updateState(block, chain) {
   // set the well background red or green for this block
   if ($('#block'+block+'chain'+chain+'hash').val().substr(0, difficulty) === pattern) {
@@ -63,25 +64,35 @@ function calcAliceCredentials() {
 }
 
 
+function updateDataHash(block, chain) {
+  console.log("updateDataHash");
+  $('#block'+block+'chain'+chain+'data').val(CryptoJS.SHA256($('#block'+block+'chain'+chain+'txData').html()));
+}
 
 
 function updateHash(block, chain) {
+  console.log("updateHash");
   // update the SHA256 hash value for this block
   $('#block'+block+'chain'+chain+'hash').val(sha256(block, chain));
   updateState(block, chain);
 }
 
 function updateChain(block, chain) {
+  console.log("updateChain");
   // update all blocks walking the chain from this block to the end
   for (var x = block; x <= 3; x++) {
     if (x > 1) {
       $('#block'+x+'chain'+chain+'previous').val($('#block'+(x-1).toString()+'chain'+chain+'hash').val());
     }
+    updateDataHash(x, chain);
     updateHash(x, chain);
+
   }
+
 }
 
 function mine(block, chain, isChain) {
+  console.log("mine");
   for (var x = 0; x <= maximumNonce; x++) {
     $('#block'+block+'chain'+chain+'nonce').val(x);
     $('#block'+block+'chain'+chain+'hash').val(sha256(block, chain));
@@ -94,5 +105,17 @@ function mine(block, chain, isChain) {
       }
       break;
     }
+  }
+}
+
+function minerBlockMine() {
+  for (var x = 0; x <= maximumNonce; x++) {
+    $('#block1chain2nonce').val(x);
+    $('#block1chain2hash').val(sha256(1, 2));
+    if ($('#block1chain2hash').val().substr(0, difficulty) === pattern) {
+      updateHash(1, 2);
+      break;
+    }
+
   }
 }

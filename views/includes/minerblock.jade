@@ -30,9 +30,11 @@
         label.col-sm-2.control-label Coinbase:
         .col-sm-10
           .input-group
-            .input-group-addon $
+            .input-group-addon
+              i.demo-icon.icon-bitcoin
             input.form-control(id='block1chain2coinbasevalue', type='text', value='#{block.coinbasevalue}', onkeyup='updateChain(1, 2);')
-            .input-group-addon -&gt;
+            .input-group-addon
+              i.demo-icon.icon-right-big
             input.form-control(id='block1chain2coinbaseto', type='text', value='#{block.coinbaseto}', onkeyup='updateChain(1, 2);')
 
 
@@ -62,8 +64,8 @@
           input.form-control(id='block1chain2hash', type='text' )
           .btn-toolbar
             i.icon-spinner.icon-spin.icon-large
-            button.btn.btn-primary.ladda-button(id='block1chain2mineButton', data-style='expand-right', onclick="txMineBlock();", type="button")
+            button.btn.btn-primary.ladda-button(id='block1chain2mineButton', data-style='expand-right')
               span.ladda-label #{__('Mine')}
 
-            button.btn.btn-primary( onclick="mineNewBlock();", type="button")
+            button.btn.btn-primary( onclick="broadcastNewBlock();", type="button")
               span Broadcast
