@@ -1,0 +1,147 @@
+extends layout
+
+block content
+  .container-fluid
+    .row
+      .col-sm-4
+        h1 Alice
+        .well#alicemsg
+          h2 Message
+          form.form-horizontal
+            .form-group
+              label.col-sm-2.control-label(for='data') Text:
+              .col-sm-10
+                textarea#data.form-control(rows='3', onkeyup='$("#hash").val(sha256())')
+            .form-group
+              label.col-sm-2.control-label(for='hash') Hash:
+              .col-sm-10
+                input#hash.form-control(type='text')
+          hr
+          form.form-horizontal
+            .form-group
+              label.col-sm-2.control-label(for='encKey') Key:
+              .col-sm-10
+                input#encKey.form-control(type='text')
+            .form-group
+              label.col-sm-2.control-label(for='signatureAlice') Signature:
+              .col-sm-10
+                input#signatureAlice.form-control(type='text')
+              .col-sm-12
+                .btn-toolbar
+                  button.btn.btn-primary(onclick="sign();", type="button") Sign
+                  button.btn.btn-primary(onclick="send();", type="button") Send Message
+
+        .well#alicekeys
+          h2 Key-Pair
+          form.form-horizontal
+            .form-group
+              label.col-sm-2.control-label(for='privKey') private Key:
+              .col-sm-10
+                input#privKey.form-control(type='text')
+            .form-group
+              label.col-sm-2.control-label(for='pubKey') public Key:
+              .col-sm-10
+                input#pubKey.form-control(type='text')
+              .col-sm-12
+                .btn-toolbar
+                  button.btn.btn-primary(onclick="generateKeyPair();", type="button") Generate Key-Pair
+      .col-sm-4
+        h1 &nbsp;
+        .well#netmsg
+          h2 Message
+          form.form-horizontal
+            .form-group
+              label.col-sm-2.control-label(for='netData') Text:
+              .col-sm-10
+                textarea#netData.form-control(rows='3', onkeyup='manipulateNetworkMessage();')
+            .form-group
+              label.col-sm-2.control-label(for='netSignature') Signature:
+              .col-sm-10
+                input#netSignature.form-control(type='text')
+      .col-sm-4
+        h1 Bob
+        .well#bobmsg
+          h2 Message
+          form.form-horizontal
+            .form-group
+              label.col-sm-2.control-label(for='bobData') Text:
+              .col-sm-10
+                textarea#bobData.form-control(rows='3', onkeyup='$("#bobHash").val(sha256())')
+            .form-group
+              label.col-sm-2.control-label(for='bobHash') Hash:
+              .col-sm-10
+                input#bobHash.form-control(type='text')
+            hr
+            .form-group
+              label.col-sm-2.control-label(for='bobPubKey') Key:
+              .col-sm-10
+                input#bobPubKey.form-control(type='text')
+            .form-group
+              label.col-sm-2.control-label(for='bobSignature') Signature:
+              .col-sm-10
+                input#bobSignature.form-control(type='text')
+              .col-sm-12
+                .btn-toolbar
+                  button.btn.btn-primary(onclick="verify();", type="button") Verify
+
+  script.
+    function getText(block, chain) {
+      return $('#data').val();
+    }
+
+    $("#hash").val(sha256());
+
+
+    var EC = elliptic.elliptic().ec;
+    var ec = new EC('secp256k1');
+    var keypair = null;
+
+    function generateKeyPair() {
+      keypair = ec.genKeyPair();
+      var prv = keypair.getPrivate('hex');
+      var pub = keypair.getPublic('hex');
+      //$('#privateKey').val(bigInt(prv, 16).toString());
+      $('#privKey').val(prv);
+      $('#pubKey').val(pub);
+    }
+
+
+    function sign() {
+      var newKeys = ec.keyFromPrivate($('#privKey').val(), 'hex');
+      var signature = newKeys.sign($('#hash').val());
+      console.log(signature);
+      var test = buffer.Buffer.from(signature.toDER()).toString('hex');
+      $('#signatureAlice').val(test);
+
+      // Verify signature
+      //console.log(keypair.verify($('#hash').val(), derSign));
+    }
+
+    function send() {
+      var msg = $('#data').val();
+      var sig = $('#signatureAlice').val();
+
+      $('#netData').val(msg);
+      $('#netSignature').val(sig);
+      $('#bobData').val(msg);
+      $('#bobSignature').val(sig);
+      $("#bobHash").val(sha256());
+    }
+
+    function verify() {
+      var newKeys = ec.keyFromPublic($('#bobPubKey').val(), 'hex');
+      var signature = $('#bobSignature').val();
+
+      if (newKeys.verify($('#bobHash').val(), signature)) {
+        $("#bobHash").removeClass("bgcolor-error").addClass("bgcolor-success");
+      } else {
+        $("#bobHash").removeClass("bgcolor-success").addClass("bgcolor-error");
+      }
+    }
+
+    function manipulateNetworkMessage() {
+      $('#bobData').val($('#netData').val());
+      $('#bobSignature').val($('#netSignature').val());
+      $("#bobHash").val(CryptoJS.SHA256($('#bobData').val()));
+    }
+
