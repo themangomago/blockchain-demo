@@ -254,6 +254,16 @@ block content
     }
 
 
+    function calcHash(block, chain) {
+      var s;
+      for (var x=0; $('#block'+block+'chain'+chain+'tx'+x+'value').length > 0; x++) {
+        s = s + $('#block'+block+'chain'+chain+'tx'+x+'value').val() +
+                $('#block'+block+'chain'+chain+'tx'+x+'from').val() +
+                $('#block'+block+'chain'+chain+'tx'+x+'to').val();
+      }
+      $('#block'+block+'chain'+chain+'tx'+x+'data').val(CryptoJS.SHA256(s));
+    }
+
     function getText(block, chain) {
       var s = $('#block'+block+'chain'+chain+'number').val() +
               $('#block'+block+'chain'+chain+'nonce').val() +

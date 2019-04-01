@@ -51,13 +51,13 @@
               input.form-control(id='block#{block.block}chain#{block.chain}tx#{x}id', style='width:48px;', type='text', value='#{index}')
               .input-group-addon
                 i.demo-icon.icon-bitcoin
-              input.form-control(id='block#{block.block}chain#{block.chain}tx#{x}value', type='text', value='#{tx.value}', onkeyup='updateChain(#{block.block}, #{block.chain});')
+              input.form-control(id='block#{block.block}chain#{block.chain}tx#{x}value', type='text', value='#{tx.value}', onkeyup='updateChain(#{block.block}, #{block.chain}); calcHash(#{block.block}, #{block.chain});')
               .input-group-addon
                 i.demo-icon.icon-user
-              input.form-control(id='block#{block.block}chain#{block.chain}tx#{x}from', type='text', value='#{tx.from}', onkeyup='updateChain(#{block.block}, #{block.chain});')
+              input.form-control(id='block#{block.block}chain#{block.chain}tx#{x}from', type='text', value='#{tx.from}', onkeyup='updateChain(#{block.block}, #{block.chain}); calcHash(#{block.block}, #{block.chain});')
               .input-group-addon
                 i.demo-icon.icon-right-big
-              input.form-control(id='block#{block.block}chain#{block.chain}tx#{x}to', type='text', value='#{tx.to}', onkeyup='updateChain(#{block.block}, #{block.chain});')
+              input.form-control(id='block#{block.block}chain#{block.chain}tx#{x}to', type='text', value='#{tx.to}', onkeyup='updateChain(#{block.block}, #{block.chain}); calcHash(#{block.block}, #{block.chain});')
             - index += 1;
 
 
